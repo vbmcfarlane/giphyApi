@@ -3,29 +3,27 @@
      $('#fail').hide();
      $('#warning').hide();
      // Initial array of animals
-      var animals = ["cats", "dogs", "rabbit", "hamster","goldfish","bird","horses"];
+      var animals = ["animals", "cars", "weddings", "dance","swimming","camping","fishing","birds"];
 
       // displayanimalInfo function re-renders the HTML to display the appropriate content
       function displayanimalInfo() {
 
       var animal = $(this).attr("data-name");
-      console.log("animal = " + animal);
-      console.log("this = " + this);
-
-
+     
     // var queryURL = "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&limit=10&search?q="+ animal;
        
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=dc6zaTOxFJmzC&limit=9";
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=dc6zaTOxFJmzC&limit=10";
 
-       
+                
        
         // Creating an AJAX call for the specific animal button being clicked
         $.ajax({
           url: queryURL,
           method: "GET"
         }).done(function(response) {
-          //removes previously populated divs of animal gifs
-         $( "div" ).remove( ".animal" );
+
+          //removes previously populated divs of animal gifs to prep for load on page
+         $( "div" ).remove( ".imgState" );
          // loads new pics into the page
           var results = response.data;
           console.log("number of records = " + results.length);
@@ -34,18 +32,21 @@
         for (var i = 0; i < results.length; i++) {
 
             // Creating and storing a div tag
-            var animalDiv = $("<div class='animal' style='float: left' >");
+            var animalDiv = $("<div class='imgState'>");
             // Creating a paragraph tag with the result item's rating
             var p = $("<p>").text("Rating: " + results[i].rating);
-            // Creating and storing an image tag
+
+            // Creating and storing still and animated images
             var animalImage = $("<img>");
-            // Setting the src attribute of the image to a property pulled off the result item
-            animalImage.attr("src", results[i].images.fixed_height.url);
+                animalImage.attr("src", results[i].images.fixed_height_still.url);
+                animalImage.attr("data-still", results[i].images.fixed_height_still.url);
+                animalImage.attr("data-animate", results[i].images.fixed_height.url)
           
             // Appending the paragraph and image tag to the animalDiv
-            animalDiv.append(p);
+          
             animalDiv.append(animalImage);
-           
+            animalDiv.append(p);
+        
              $("#animals-view").append(animalDiv);
           }   
 
@@ -107,6 +108,14 @@
                     $("#animal-input").val('');
             } 
       });
+
+      $(document).on("click", "img", function() {
+              if ($(this).attr("src") != $(this).attr("data-animate")) {
+                $(this).attr("src", $(this).attr("data-animate"));
+              } else {
+                $(this).attr("src", $(this).attr("data-still"));
+              }
+  })
 
       // Adding a click event listener to all elements with a class of "animal"
       $(document).on("click", ".animal", displayanimalInfo);
