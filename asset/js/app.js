@@ -3,7 +3,7 @@
      $('#fail').hide();
      $('#warning').hide();
      // Initial array of animals
-      var animals = ["animals", "cars", "weddings", "dance","swimming","camping","fishing","birds"];
+      var animals = ["animals", "cars", "weddings", "dance","swimming","karate","wrestling","birds"];
 
       // displayanimalInfo function re-renders the HTML to display the appropriate content
       function displayanimalInfo() {
